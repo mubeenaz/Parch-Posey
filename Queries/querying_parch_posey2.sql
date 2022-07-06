@@ -19,7 +19,7 @@ ORDER BY 2 DESC;
 SELECT SUM(num) num_ct, SUM(letter) letter_ct
 FROM (
 	SELECT	name,
-    CASE 
+	CASE 
 		WHEN LEFT(UPPER(name), 1) IN ('0', '1', '2', '3', '4', '5', '6', '7', '8', '9') THEN 1 ELSE 0 END num,
 	CASE
 		WHEN LEFT(UPPER(name), 1) IN ('0', '1', '2', '3', '4', '5', '6', '7', '8', '9') THEN 0 ELSE 1 END letter

@@ -647,20 +647,21 @@ FROM orders;
 
 -- number of orders in each of three categories 
 SELECT 	CASE 
-		WHEN total >= 2000 THEN 'At least 2000'
-        WHEN total >= 1000 AND total < 2000 THEN 'Between 1000 and 2000'
-        ELSE 'Less than 1000' END order_category,
-        COUNT(*) num_orders 
+	WHEN total >= 2000 THEN 'At least 2000'
+	WHEN total >= 1000 AND total < 2000 THEN 'Between 1000 and 2000'
+	ELSE 'Less than 1000' END order_category,
+	COUNT(*) num_orders 
 FROM orders
 GROUP BY 1;
 
 
 -- 3 levels of customers based on total sales of all orders 
 SELECT 	a.name account, 
-		SUM(o.total_amt_usd) total_sales, 
-		CASE WHEN SUM(o.total_amt_usd) > 200000 THEN 'Top'
-			 WHEN SUM(o.total_amt_usd) BETWEEN 100000 AND 200000 THEN 'Middle'
-             WHEN SUM(o.total_amt_usd) < 100000 THEN 'Low' END level 
+	SUM(o.total_amt_usd) total_sales, 
+	CASE 
+    WHEN SUM(o.total_amt_usd) > 200000 THEN 'Top'
+	WHEN SUM(o.total_amt_usd) BETWEEN 100000 AND 200000 THEN 'Middle'
+	WHEN SUM(o.total_amt_usd) < 100000 THEN 'Low' END level 
 FROM accounts a
 JOIN orders o
 	ON a.id = o.account_id
@@ -670,10 +671,11 @@ ORDER BY 2 DESC;
 
 -- 3 levels of customers based on total sales of all orders in 2016 and 2017 
 SELECT 	a.name account, 
-		SUM(o.total_amt_usd) total_sales, 
-		CASE WHEN SUM(o.total_amt_usd) > 200000 THEN 'Top'
-			 WHEN SUM(o.total_amt_usd) BETWEEN 100000 AND 200000 THEN 'Middle'
-             WHEN SUM(o.total_amt_usd) < 100000 THEN 'Low' END level 
+	SUM(o.total_amt_usd) total_sales, 
+	CASE 
+    WHEN SUM(o.total_amt_usd) > 200000 THEN 'Top'
+	WHEN SUM(o.total_amt_usd) BETWEEN 100000 AND 200000 THEN 'Middle'
+	WHEN SUM(o.total_amt_usd) < 100000 THEN 'Low' END level 
 FROM accounts a
 JOIN orders o
 	ON a.id = o.account_id
@@ -684,9 +686,9 @@ ORDER BY 2 DESC;
 
 -- top performing reps 
 SELECT 	s.name rep, 
-		COUNT(*) num_orders, 
-        CASE WHEN COUNT(*) > 200 THEN 'top'
-			 ELSE 'not' END performance
+	COUNT(*) num_orders, 
+	CASE WHEN COUNT(*) > 200 THEN 'top'
+		ELSE 'not' END performance
 FROM sales_reps s
 JOIN accounts a
 	ON s.id = a.sales_rep_id
@@ -699,11 +701,12 @@ ORDER BY 2 DESC;
         
 -- top performing reps revised 
 SELECT 	s.name rep, 
-		COUNT(*) num_orders, 
-        SUM(o.total_amt_usd) total_sales,
-        CASE WHEN COUNT(*) > 200 OR SUM(o.total_amt_usd) > 750000 THEN 'top'
-			 WHEN COUNT(*) > 150 OR SUM(o.total_amt_usd) BETWEEN 500000 AND 750000 THEN 'middle'
-			 ELSE 'low' END performance
+	COUNT(*) num_orders, 
+	SUM(o.total_amt_usd) total_sales,
+	CASE 
+	WHEN COUNT(*) > 200 OR SUM(o.total_amt_usd) > 750000 THEN 'top'
+	WHEN COUNT(*) > 150 OR SUM(o.total_amt_usd) BETWEEN 500000 AND 750000 THEN 'middle'
+	ELSE 'low' END performance
 FROM sales_reps s
 JOIN accounts a
 	ON s.id = a.sales_rep_id
