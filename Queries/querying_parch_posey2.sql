@@ -18,7 +18,7 @@ ORDER BY 2 DESC;
 -- what proportion of names start with a letter 
 SELECT SUM(num) num_ct, SUM(letter) letter_ct
 FROM (
-	SELECT	name, 
+	SELECT	name,
     CASE 
 		WHEN LEFT(UPPER(name), 1) IN ('0', '1', '2', '3', '4', '5', '6', '7', '8', '9') THEN 1 ELSE 0 END num,
 	CASE
@@ -30,8 +30,8 @@ ORDER BY 1) t1;
 -- proportion of company names that start with vowels and proportion that start with anything else 
 SELECT SUM(vowel) vowel_ct, SUM(not_vowel) not_vowel_ct
 FROM (
-	SELECT	name, 
-    CASE
+	SELECT	name,
+	CASE
 		WHEN LEFT(UPPER(name), 1) IN ('A', 'E', 'I', 'O', 'U') THEN 1 ELSE 0 END vowel, 
 	CASE
         WHEN LEFT(UPPER(name), 1) IN ('A', 'E', 'I', 'O', 'U') THEN 0 ELSE 1 END not_vowel
