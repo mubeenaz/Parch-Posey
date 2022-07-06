@@ -1,4 +1,4 @@
--- This script is 1 of 2 which is used to answer various business questions to help Parch & Posey better understand its company data 
+/* This script is 1 of 2 which is used to answer various business questions to help Parch & Posey better understand its company data */
 
 
 -- Sample web_events table 
