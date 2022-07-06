@@ -789,18 +789,18 @@ JOIN accounts a
 JOIN orders o
 	ON o.account_id = a.id
 WHERE r.name = (SELECT region
-				FROM 
-					(SELECT r.name region, SUM(o.total_amt_usd) total_sales 
-					FROM region r
-					JOIN sales_reps s
-						ON r.id = s.region_id
-					JOIN accounts a
-						ON a.sales_rep_id = s.id
-					JOIN orders o
-						ON o.account_id = a.id
-					GROUP BY 1
-					ORDER BY 2 DESC) t1
-				LIMIT 1)
+	FROM 
+	(SELECT r.name region, SUM(o.total_amt_usd) total_sales 
+	FROM region r
+	JOIN sales_reps s
+		ON r.id = s.region_id
+	JOIN accounts a
+		ON a.sales_rep_id = s.id
+	JOIN orders o
+		ON o.account_id = a.id
+	GROUP BY 1
+	ORDER BY 2 DESC) t1
+	LIMIT 1)
 GROUP BY 1;
 
 
@@ -836,7 +836,7 @@ FROM accounts a
 JOIN web_events w
 	ON a.id = w.account_id
 WHERE a.name = (SELECT account
-FROM (
+	FROM (
 	SELECT a.name account, SUM(o.total_amt_usd) total_spent
 	FROM accounts a
 	JOIN orders o
@@ -855,14 +855,14 @@ FROM accounts a
 JOIN orders o
 	ON a.id	= o.account_id
 WHERE a.name IN (SELECT account
-FROM (
-SELECT a.name account, SUM(o.total_amt_usd) total_spent 
-FROM accounts a
-JOIN orders o
-	ON a.id	= o.account_id
-GROUP BY 1
-ORDER BY 2 DESC
-LIMIT 10) t1)
+	FROM (
+	SELECT a.name account, SUM(o.total_amt_usd) total_spent 
+	FROM accounts a
+	JOIN orders o
+		ON a.id	= o.account_id
+	GROUP BY 1
+	ORDER BY 2 DESC
+	LIMIT 10) t1)
 GROUP BY 1
 ORDER BY 2 DESC;
 
@@ -877,7 +877,7 @@ FROM (SELECT a.name account, AVG(o.total_amt_usd) avg_spent
 		ON a.id	= o.account_id
 	GROUP BY 1
 	HAVING AVG(o.total_amt_usd) > (SELECT AVG(total_amt_usd) 
-									FROM orders)
+		FROM orders)
 	ORDER BY 2 DESC) t1;
 
 
@@ -893,8 +893,8 @@ WITH t1 AS (SELECT r.name region, s.name rep, SUM(o.total_amt_usd) total_sales
 		GROUP BY 1, 2
 		ORDER BY 1), 
 	t2 AS (SELECT region, MAX(total_sales) largest_sale_amt
-	FROM t1
-	GROUP BY 1)
+		FROM t1
+		GROUP BY 1)
 	
 SELECT t2.region, rep, t2.largest_sale_amt
 FROM t2
@@ -905,15 +905,15 @@ ORDER BY 3 DESC;
 
 /* Sub2 with CTE */
 WITH t1 AS (SELECT r.name region, SUM(o.total_amt_usd) total_sales 
-					FROM region r
-					JOIN sales_reps s
-						ON r.id = s.region_id
-					JOIN accounts a
-						ON a.sales_rep_id = s.id
-					JOIN orders o
-						ON o.account_id = a.id
-					GROUP BY 1
-					ORDER BY 2 DESC)
+	FROM region r
+	JOIN sales_reps s
+		ON r.id = s.region_id
+	JOIN accounts a
+		ON a.sales_rep_id = s.id
+	JOIN orders o
+		ON o.account_id = a.id
+	GROUP BY 1
+	ORDER BY 2 DESC)
                     
 SELECT r.name region, COUNT(*) total_orders
 FROM region r
@@ -924,31 +924,32 @@ JOIN accounts a
 JOIN orders o
 	ON o.account_id = a.id
 WHERE r.name = (SELECT region
-				FROM t1
-				LIMIT 1)	
+	FROM t1
+	LIMIT 1)	
 GROUP BY 1;
 
 
 /* Sub3 using CTE */
 WITH t1 AS (SELECT a.name account, SUM(standard_qty) total_qty_std
-			FROM accounts a
-			JOIN orders o
-				ON a.id = o.account_id
-			GROUP BY 1
-			ORDER BY 2 DESC
-			LIMIT 1),
-	t2 AS (SELECT a.name account, SUM(o.total) total_purchases
 	FROM accounts a
 	JOIN orders o
 		ON a.id = o.account_id
 	GROUP BY 1
-	HAVING SUM(o.total) > (SELECT SUM(o.total) total_purchses  
+	ORDER BY 2 DESC
+	LIMIT 1),
+    
+	t2 AS (SELECT a.name account, SUM(o.total) total_purchases
 		FROM accounts a
 		JOIN orders o
 			ON a.id = o.account_id
-		WHERE a.name = (SELECT account 
-			FROM t1))
-            )
+		GROUP BY 1
+		HAVING SUM(o.total) > (SELECT SUM(o.total) total_purchses  
+			FROM accounts a
+			JOIN orders o
+				ON a.id = o.account_id
+			WHERE a.name = (SELECT account 
+				FROM t1))
+			)
 
 SELECT COUNT(*) num_accts
 FROM t2;
@@ -968,19 +969,19 @@ FROM accounts a
 JOIN web_events w
 	ON a.id = w.account_id
 WHERE a.name = (SELECT account
-FROM t1)
+	FROM t1)
 GROUP BY 1, 2
 ORDER BY 3 DESC;
 
 
 /* Sub5 using CTE */
 WITH t1 AS (SELECT a.name account, SUM(o.total_amt_usd) total_spent 
-FROM accounts a
-JOIN orders o
-	ON a.id	= o.account_id
-GROUP BY 1
-ORDER BY 2 DESC
-LIMIT 10)
+		FROM accounts a
+		JOIN orders o
+			ON a.id	= o.account_id
+		GROUP BY 1
+		ORDER BY 2 DESC
+		LIMIT 10)
 
 SELECT AVG(total_spent) lifetime_avg_spent
 FROM t1;
