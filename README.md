@@ -8,6 +8,6 @@ Using SQL, I was able to answer several business questions which aided Parch & P
 
 ## Repository Contents 
 
-The business questions asked along with the SQL written to answer them is divided into two files which can be found in the 'Queries/' folder. 
+The business questions asked along with the SQL written to answer them is divided into two files which can be found in the `Queries/` folder. 
 
-The code for creation of tables within the Parch & Posey database and insertion of data into those tables is contained within the 'parch_posey_data.sql' script. 
+The code for creation of tables within the Parch & Posey database and insertion of data into those tables is contained within the `parch_posey_data.sql` script. 
