@@ -755,7 +755,7 @@ FROM
 SELECT t2.region, rep, t2.largest_sale_amt
 FROM 	
     (SELECT region, MAX(total_sales) largest_sale_amt
-	FROM
+    FROM
 		(SELECT r.name region, s.name rep, SUM(o.total_amt_usd) total_sales 
 		FROM region r
 		JOIN sales_reps s
@@ -767,17 +767,17 @@ FROM
 		GROUP BY 1, 2
 		ORDER BY 1) t1
 	GROUP BY 1) t2
-JOIN (SELECT r.name region, s.name rep, SUM(o.total_amt_usd) total_sales 
-	FROM region r
-	JOIN sales_reps s
-		ON r.id = s.region_id
-	JOIN accounts a
-		ON a.sales_rep_id = s.id
-	JOIN orders o
-		ON o.account_id = a.id
-	GROUP BY 1, 2
-	ORDER BY 1) t1
-ON t1.region = t2.region AND t1.total_sales = t2.largest_sale_amt
+	JOIN (SELECT r.name region, s.name rep, SUM(o.total_amt_usd) total_sales 
+		FROM region r
+		JOIN sales_reps s
+			ON r.id = s.region_id
+		JOIN accounts a
+			ON a.sales_rep_id = s.id
+		JOIN orders o
+			ON o.account_id = a.id
+		GROUP BY 1, 2
+		ORDER BY 1) t1
+	ON t1.region = t2.region AND t1.total_sales = t2.largest_sale_amt
 ORDER BY 3 DESC;
 
 
