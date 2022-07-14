@@ -766,8 +766,8 @@ FROM
 			ON o.account_id = a.id
 		GROUP BY 1, 2
 		ORDER BY 1) t1
-	GROUP BY 1) t2
-	JOIN (SELECT r.name region, s.name rep, SUM(o.total_amt_usd) total_sales 
+    GROUP BY 1) t2
+    JOIN (SELECT r.name region, s.name rep, SUM(o.total_amt_usd) total_sales 
 		FROM region r
 		JOIN sales_reps s
 			ON r.id = s.region_id
@@ -777,7 +777,7 @@ FROM
 			ON o.account_id = a.id
 		GROUP BY 1, 2
 		ORDER BY 1) t1
-	ON t1.region = t2.region AND t1.total_sales = t2.largest_sale_amt
+    ON t1.region = t2.region AND t1.total_sales = t2.largest_sale_amt
 ORDER BY 3 DESC;
 
 
